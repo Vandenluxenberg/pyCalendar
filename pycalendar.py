@@ -9,24 +9,43 @@ from time import sleep, strftime
 user_name = "Dave"
 my_calendar = {}
 
-# Welcome message #
+# Calendar handling functions
+
+def open_calendar():
+    print "Opening calendar..."
+    f = open("pycalendar.txt", "r")
+    for line in f:
+        date, reminder = line.split(";")
+        reminder = reminder.rstrip("\n")
+        my_calendar[date] = reminder
+    f.close()
+    sleep(0.5)
+
+def save_calendar():
+    #print "Saving calendar..."
+    cal_string = ""
+    f = open("pycalendar.txt", "w")
+    for date in sorted(my_calendar):
+        cal_string += str(date) + ";" + str(my_calendar[date]) + "\n"
+    f.write(cal_string)
+    f.close()
+    sleep(0.5)
+
+def print_calendar():
+    print ""
+    for date in sorted(my_calendar):
+        print date + ": " + my_calendar[date]
+    print ""
+
+# Welcome message + loading #
 
 def welcome():
     print "Welcome " + user_name + "."
-    print "Opening the calendar..."
-    sleep(1)
+    open_calendar()
 
-    print ""
     print "Today is: " + strftime("%A %B %d, %Y")
-    print "Current time is: " + strftime("%H:%M:%S")
-    print ""
+    print "Current time is: " + strftime("%H:%M:%S") + "\n"
     sleep(1)
-
-# Print the calendar sorted by month/day #
-
-def print_calendar():
-    for date in sorted(my_calendar):
-        print date + ": " + my_calendar[date] + "\n"
 
 # Main #
 
@@ -53,6 +72,7 @@ def main_calendar():
                 update = raw_input("Enter the update: ")
                 my_calendar[date] = update
                 sleep(1)
+                save_calendar()
                 print "Calendar succesfully updated!\n"
 
         elif user_choice == "A":  #Add to calendar
@@ -70,7 +90,7 @@ def main_calendar():
             else:
                 reminder = raw_input("Enter reminder: ")
                 my_calendar[date] = reminder
-                sleep(1)
+                save_calendar()
                 print "Reminder succesfully added to calendar!\n"
 
         elif user_choice == "D":  #Delete from calendar
@@ -80,7 +100,7 @@ def main_calendar():
                 print "Error. Date doesn't have a reminder yet.\n"
             else:
                 my_calendar.pop(date)
-                sleep(1)
+                save_calendar()
                 print "Reminder succesfully deleted.\n"
 
         elif user_choice == "X":  #Exit
