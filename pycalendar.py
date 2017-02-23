@@ -13,7 +13,7 @@ my_calendar = {}
 
 def open_calendar():
     print "Opening calendar..."
-    f = open("pycalendar.txt", "r")
+    f = open("pycalendar.txt", "w+")
     for line in f:
         date, reminder = line.split(";")
         reminder = reminder.rstrip("\n")
@@ -24,7 +24,7 @@ def open_calendar():
 def save_calendar():
     #print "Saving calendar..."
     cal_string = ""
-    f = open("pycalendar.txt", "w")
+    f = open("pycalendar.txt", "w+")
     for date in sorted(my_calendar):
         cal_string += str(date) + ";" + str(my_calendar[date]) + "\n"
     f.write(cal_string)
